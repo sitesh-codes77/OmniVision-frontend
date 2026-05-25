@@ -1,0 +1,348 @@
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import api from "../api";
+import "../public/assets/css/assignGroundstaff.css";
+import Loader from "../components/loader";
+
+const AssignGroundstaff = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    number: "",
+    address: "",
+    password: "",
+  });
+
+  const [message, setMessage] = useState("");
+  const [assignedAgency, setAssignedAgency] = useState("Loading...");
+  const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  const [nameError, setNameError] = useState("");
+  const [numberError, setNumberError] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { agencyId } = useParams();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await api.get("backend/check-auth");
+        if (response.status === 200) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+        navigate("/agencyLogin");
+        return;
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!agencyId) return;
+
+    const fetchAgencyName = async () => {
+      try {
+        const response = await api.get(`backend/agency/${agencyId}`);
+        if (response.data?.success) {
+          setAssignedAgency(response.data.data.agency_name);
+        } else {
+          setAssignedAgency("Agency");
+        }
+      } catch {
+        setAssignedAgency("Agency");
+      }
+    };
+
+    fetchAgencyName();
+  }, [agencyId]);
+
+  if (authLoading) {
+    return <Loader />;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  const queryParams = new URLSearchParams(location.search);
+  const eventId = queryParams.get("eventId");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Run validation before submitting
+    const nameTrimmed = formData.name.trim();
+    const nameValid = nameTrimmed
+      .split(/\s+/)
+      .every((w) => /^[A-Z][a-zA-Z]*$/.test(w));
+
+    if (!nameValid) {
+      setNameError("Each word must start with a capital letter");
+      return;
+    }
+
+    if (!/^[6-9]\d{9}$/.test(formData.number)) {
+      setNumberError("Must be a valid 10-digit Indian mobile number (starts with 6–9)");
+      return;
+    }
+
+    if (!formData.name || !formData.number || !formData.address || !formData.password) {
+      setMessage("Please fill all fields before submitting.");
+      return;
+    }
+
+    try {
+      const payload = { ...formData, agencyId };
+      const response = await api.post("backend/agency/addgroundstaff", payload);
+
+      if (response.data?.success) {
+        setMessage("Ground staff added successfully!");
+        setFormData({ name: "", number: "", address: "", password: "" });
+        setNameError("");
+        setNumberError("");
+
+        eventId
+          ? navigate(`/eventReport/${eventId}`)
+          : navigate(`/dashboard/${agencyId}`);
+      } else {
+        setMessage("Failed to add ground staff.");
+      }
+    } catch {
+      setMessage("An error occurred. Please try again.");
+    }
+  };
+
+  return (
+    <div className="assign-ground-staff-wrapper">
+      {/* HEADER */}
+      <header className="assign-header">
+        <div className="assign-header-container">
+          <div className="assign-header-content">
+            <div
+              className="assign-logo"
+              onClick={() => navigate(`/dashboard/${agencyId}`)}
+            >
+              <img
+                src="/images/omnivision-logo.png"
+                alt="Logo"
+                className="assign-logo-image"
+              />
+            </div>
+
+            <div className="assign-header-title">
+              <h1>Ground Staff Registration</h1>
+            </div>
+
+            <div className="assign-menu-toggle" onClick={() => setIsOpen(true)}>
+              <img
+                src="/images/menu-bar.svg"
+                alt="Menu"
+                className="assign-menu-icon"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {isOpen && (
+        <div className="assign-backdrop" onClick={() => setIsOpen(false)} />
+      )}
+
+      {/* SIDEBAR */}
+      <div className={`assign-sidebar ${isOpen ? "assign-sidebar-open" : ""}`}>
+        <div className="assign-sidebar-content">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="assign-sidebar-close"
+          >
+            ✕
+          </button>
+
+          <ul className="assign-sidebar-menu">
+            <li>
+              <button
+                onClick={() => navigate(`/dashboard/${agencyId}`)}
+                className="assign-sidebar-menu-item"
+              >
+                Home
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* MAIN */}
+      <main className="assign-main-content">
+        <div className="assign-container">
+          <div className="assign-form-card">
+            {/* CARD HEADER */}
+            <div className="assign-card-header">
+              <div className="assign-card-header-content">
+                <div className="assign-card-icon">
+                  <img src="/images/On-boarding.png" alt="Onboarding" />
+                </div>
+                <h2>Add Ground Staff</h2>
+              </div>
+            </div>
+
+            {/* CARD BODY */}
+            <div className="assign-card-body">
+              <form onSubmit={handleSubmit} className="assign-form">
+                <div className="assign-form-row">
+                  {/* NAME */}
+                  <div className="assign-form-group">
+                    <label className="assign-form-label">
+                      Full Name <span className="assign-required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      placeholder="Name of ground staff"
+                      className={`assign-form-input ${nameError ? "assign-input-error" : ""}`}
+                      onChange={(e) => {
+                        if (/^[a-zA-Z\s]*$/.test(e.target.value)) {
+                          handleChange(e);
+                          setNameError("");
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const trimmed = e.target.value.trim();
+                        if (!trimmed) return;
+                        const valid = trimmed
+                          .split(/\s+/)
+                          .every((w) => /^[A-Z][a-zA-Z]*$/.test(w));
+                        if (!valid) {
+                          setNameError("Each word must start with a capital letter");
+                        } else {
+                          setNameError("");
+                        }
+                      }}
+                      required
+                    />
+                    {nameError && (
+                      <span className="assign-field-error">{nameError}</span>
+                    )}
+                  </div>
+
+                  {/* NUMBER */}
+                  <div className="assign-form-group">
+                    <label className="assign-form-label">
+                      Mobile Number <span className="assign-required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="number"
+                      maxLength={10}
+                      value={formData.number}
+                      placeholder="Enter 10-digit mobile number"
+                      className={`assign-form-input ${numberError ? "assign-input-error" : ""}`}
+                      onChange={(e) => {
+                        if (/^\d{0,10}$/.test(e.target.value)) {
+                          handleChange(e);
+                          setNumberError("");
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.target.value && !/^[6-9]\d{9}$/.test(e.target.value)) {
+                          setNumberError(
+                            "Must be a valid 10-digit Indian mobile number (starts with 6–9)"
+                          );
+                        } else {
+                          setNumberError("");
+                        }
+                      }}
+                      required
+                    />
+                    {numberError && (
+                      <span className="assign-field-error">{numberError}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* PASSWORD */}
+                <div className="assign-form-group">
+                  <label className="assign-form-label">
+                    Password <span className="assign-required">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    placeholder="Enter password"
+                    className="assign-form-input"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {/* ADDRESS */}
+                <div className="assign-form-group">
+                  <label className="assign-form-label">
+                    Address <span className="assign-required">*</span>
+                  </label>
+                  <textarea
+                    name="address"
+                    rows="4"
+                    value={formData.address}
+                    placeholder="Enter address"
+                    onChange={handleChange}
+                    className="assign-form-textarea"
+                    required
+                  />
+                </div>
+
+                <div className="assign-form-actions">
+                  <button type="submit" className="assign-btn assign-btn-submit">
+                    Submit
+                  </button>
+
+                  <button
+                    type="button"
+                    className="assign-btn assign-btn-back"
+                    onClick={() =>
+                      eventId
+                        ? navigate(`/eventReport/${eventId}`)
+                        : navigate(`/dashboard/${agencyId}`)
+                    }
+                  >
+                    Back
+                  </button>
+                </div>
+
+                {message && (
+                  <div
+                    className={`assign-message ${
+                      message.includes("success")
+                        ? "assign-message-success"
+                        : "assign-message-error"
+                    }`}
+                  >
+                    <p>{message}</p>
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer className="assign-footer">
+        © 2026 OmniVision. All rights reserved by Neuradyne.
+      </footer>
+    </div>
+  );
+};
+
+export default AssignGroundstaff;

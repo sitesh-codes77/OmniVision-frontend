@@ -1,0 +1,493 @@
+/* ═══════════════════════════════════════════════════════════════════
+   EVENT REPORT – CLEAN ENTERPRISE LIGHT BLUE THEME
+   ═══════════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: #2c3e50;
+  background: linear-gradient(180deg, #e3f2fd 0%, #f0f9ff 100%);
+  overflow-y: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WRAPPER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.event-report-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.event-report-header {
+  background: linear-gradient(180deg, #1f6fb2 10%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.event-report-header .container {
+  max-width: 1200px;
+  margin: auto;
+  height: 80px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.logo img {
+  height: 60px;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+}
+
+.header-title h1 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════════════════════════════ */
+
+.event-report-content {
+  flex: 1;
+  padding: 30px 0;
+}
+
+.event-report-content .container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GRID
+   ═══════════════════════════════════════════════════════════════════ */
+
+.report-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SECTION HEADINGS (Unified)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #bae6fd;
+}
+
+.section-heading img {
+  height: 26px;
+}
+
+.section-heading h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #113655;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INFO CARD (Used for Report + Assign only)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.info-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0f2fe;
+  box-shadow: 0 6px 20px rgba(17, 54, 85, 0.12);
+  padding: 24px;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REPORT TABLE
+   ═══════════════════════════════════════════════════════════════════ */
+
+.info-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.info-table tr {
+  background: linear-gradient(90deg, #f0f9ff, #e0f2fe);
+}
+
+.info-table td {
+  padding: 14px 18px;
+}
+
+.info-table td:first-child {
+  font-weight: 600;
+  color: #1e40af;
+  width: 45%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOCATION SECTION (UNCHANGED – MAP STYLES PRESERVED)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.map-section-open {
+  background: transparent;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.map-container {
+  height: 450px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid #0ea5e9;
+  position: relative;
+}
+
+.map-pin-btn {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(14, 165, 233, 0.65);
+  background: rgba(255, 255, 255, 0.96);
+  color: #0ea5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.25);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.map-pin-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.32);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INCIDENT IMAGE (FIXED HEIGHT CONTAINER - BOOTSTRAP COMPATIBLE)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main image wrapper with fixed height */
+.image-wrapper {
+  height: 520px; /* Fixed height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 12px;
+  padding: 1rem;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(17, 54, 85, 0.12);
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* Ensures full image is visible without cropping */
+  border-radius: 8px;
+}
+
+/* Alternative: If using Bootstrap card-body class */
+.card-body.image-body {
+  height: 520px; /* Fixed height - adjust as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+/* If using figure element with incident-image class */
+.incident-image {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.incident-image img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.375rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ASSIGN GROUND STAFF
+   ═══════════════════════════════════════════════════════════════════ */
+
+.assign-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.assign-top-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #1e40af;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #bae6fd;
+}
+
+.assign-details-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f1f1;
+  transition: 0.3s ease;
+}
+
+.assign-details-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+.card-header h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* Body */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Detail Row */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  gap: 10px;
+}
+
+.label {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.value {
+  font-weight: 600;
+  color: #111827;
+  flex: 1;
+  min-width: 0;          /* VERY IMPORTANT for ellipsis in flex */
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Buttons Section */
+.assign-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Assign Button */
+.assign-btn {
+  flex: 1;
+  background-color: #10b981;
+  border: none;
+  padding: 10px 0;
+  color: white;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.assign-btn:hover {
+  background-color: #059669;
+}
+
+/* Unassign Button */
+.unassign-btn {
+  flex: 1;
+  background-color: #ef4444;
+  border: none;
+  padding: 10px 0;
+  color: white;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.unassign-btn:hover {
+  background-color: #dc2626;
+}
+
+.assign-actions .btn-success {
+  flex: 1.2;
+}
+
+.assign-actions .btn-danger {
+  flex: 0.8;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+.btn {
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #1f6fb2, #0284c7);
+  color: white;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: white;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.event-report-footer {
+  background: linear-gradient(180deg, #1f6fb2, #1f6fb2);
+  padding: 20px;
+  text-align: center;
+  color: #e0f2fe;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 991.98px) {
+  .image-wrapper,
+  .card-body.image-body {
+    height: 450px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .report-row {
+    grid-template-columns: 1fr;
+  }
+
+  .assign-actions {
+    flex-direction: column;
+  }
+
+  .assign-top-actions {
+    flex-direction: column;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+
+  .image-wrapper,
+  .card-body.image-body {
+    height: 350px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .image-wrapper,
+  .card-body.image-body {
+    height: 280px;
+  }
+}
