@@ -32,7 +32,7 @@ import TaskDetails from "./groundstaff/Taskdetails";
 
 function App() {
   return (
-    <BrowserRouter basename="/omnivision-app">
+    <BrowserRouter>
       <Routes>
         {/* Splash Page - Displays first for 3 seconds */}
         <Route path="/" element={<SplashPage />} />

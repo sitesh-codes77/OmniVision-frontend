@@ -27,7 +27,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/omnivison-app/',
+  base: '/',
   css: {
     preprocessorOptions: {
       scss: {
