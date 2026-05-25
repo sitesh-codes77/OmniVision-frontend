@@ -27,14 +27,16 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+# Note: Since you updated to npm install earlier, you can keep npm install here if npm ci fails
+RUN npm install
 COPY . .
 RUN npm run build
 
 # Stage 2: Serve the compiled static assets using a clean Nginx instance
 FROM nginx:alpine
-# Copy the compiled production build assets into Nginx's public web directory
-COPY --from=builder /app/dist /usr/share/nginx/html/omnivison-app
+# ✅ FIX: Copy the assets directly into Nginx's main web root folder, NOT a subfolder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
 # Copy custom fallback inner routing logic
 COPY nginx.frontend.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
